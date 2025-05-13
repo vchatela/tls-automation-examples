@@ -51,7 +51,6 @@ echo 'export VCERT_APIKEY="YOUR_API_KEY_HERE"' >> ~/.bashrc
 1. In the portal, go to **Applications**
 2. Click **Add Application**
 3. Choose:
-
    * A name like `tls-demo-venafi-1`
    * Yourself as the owner
    * The `Default` template
@@ -67,7 +66,6 @@ To ensure `vcert` is available, run:
 ```
 
 This will:
-
 * Check if `vcert` is already installed
 * If not, download and install version `5.9.0` from GitHub
 
@@ -78,20 +76,20 @@ This will:
 Run:
 
 ```bash
-./request_cert.sh
-```
-
-Sample output:
-
-```text
-Enter key passphrase: ********
-vCert: Successfully connected to Venafi as a Service
-vCert: Successfully created request for tls-demo-venafi-1.vchatela.local
-PickupID="d76a9250-3009-11f0-859f-89daa42a9101"
+> ./request_cert.sh
+Enter key passphrase:***
+Verifying - Enter key passphrase:***
+vCert: 2025/05/13 17:06:13  Warning: command line parameter -k has overridden environment variable VCERT_APIKEY 
+vCert: 2025/05/13 17:06:13 Successfully connected to Venafi as a Service
+vCert: 2025/05/13 17:06:13 Successfully read zone configuration for tls-demo-venafi-1\Default
+vCert: 2025/05/13 17:06:13 Successfully created request for tls-demo-venafi-vcert.vchatela.local
+vCert: 2025/05/13 17:06:16 Successfully posted request for tls-demo-venafi-vcert.vchatela.local, will pick up by cf7489a0-300b-11f0-aac3-b5b2a373686d
+vCert: 2025/05/13 17:06:16 Successfully retrieved request for cf7489a0-300b-11f0-aac3-b5b2a373686d
+PickupID="cf7489a0-300b-11f0-aac3-b5b2a373686d"
 Certificate issued and saved:
-- Cert: artefacts/cert.pem
-- Key: artefacts/key.pem
-- Chain: artefacts/chain.pem
+- Cert: artefacts/vcert-cert.pem
+- Key: artefacts/vcert-key.pem
+- Chain: artefacts/vcert-chain.pem
 ```
 
 This script will:
@@ -104,6 +102,7 @@ This script will:
 > 🔧 Edit the CN in `request_cert.sh` to match your desired FQDN.
 
 ## Usecase 2: `VenafiPS` enrollment 
+
 
 ## Usecase 3: `cert-manager` enrollment and certificate installation for NGINX
 

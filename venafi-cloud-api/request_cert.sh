@@ -8,10 +8,10 @@ set -euo pipefail
 API_KEY="${VCERT_APIKEY:-}"
 URL="https://api.venafi.eu/"
 ZONE="tls-demo-venafi-1\Default"
-CN="tls-demo-venafi-1.vchatela.local"
-CERT_FILE="cert.pem"
-KEY_FILE="key.pem"
-CHAIN_FILE="chain.pem"
+CN="tls-demo-venafi-vcert.vchatela.local"
+CERT_FILE="artefacts/vcert-cert.pem"
+KEY_FILE="artefacts/vcert-key.pem"
+CHAIN_FILE="artefacts/vcert-chain.pem"
 
 if [[ -z "$API_KEY" ]]; then
   echo "Error: VCERT_APIKEY is not set"
