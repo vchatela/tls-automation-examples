@@ -2,7 +2,7 @@
 
 This repository contains a collection of practical TLS certificate automation use cases, designed to help organizations transition away from manual certificate management.
 
-These examples accompany a LinkedIn series by [@Valentin](https://www.linkedin.com/in/vchatela), and demonstrate real tools used to automate short-lived certificate issuance and deployment.
+These examples accompany a LinkedIn series by [@Valentin](https://www.linkedin.com/posts/vchatela_%F0%9D%97%A7%F0%9D%97%9F%F0%9D%97%A6-%F0%9D%97%94%F0%9D%98%82%F0%9D%98%81%F0%9D%97%BC%F0%9D%97%BA%F0%9D%97%AE%F0%9D%98%81%F0%9D%97%B6%F0%9D%97%BC%F0%9D%97%BB-%F0%9D%97%99%F0%9D%97%BF%F0%9D%97%BC%F0%9D%97%BA-activity-7328029709252837377-zLnZ/), and demonstrate real tools used to automate short-lived certificate issuance and deployment.
 
 ## 📌 Use Cases Covered
 
