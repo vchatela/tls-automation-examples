@@ -17,10 +17,43 @@ Each folder is a standalone working example with:
 - Test deployment to verify cert install
 
 ## 🛠 Requirements
+### Prerequisites
+- Any Linux host (wsl, VM etc.) to run and host the kubernetes cluster and any non powershell script.
+- Docker installed
+- (Optional) VSCode via `Remote - WSL extension`
 
-- Kubernetes cluster (for K8s-related demos)
-- PowerShell
-- Python 3
+### Initialize the POC
+#### Prepare Kind
+```bash
+$ chmod +x 1-prepapre-kind.sh
+$ ./1-prepapre-kind.sh
+🔍 Checking and installing Kubernetes tools...
+📦 Installing kind (v0.27.0)...
+✅ kind installed successfully.
+✅ kubectl already installed at /usr/local/bin/kubectl
+```
+#### Setup Kind
+```bash
+$ chmod +x 2-setup-kind.sh
+$ ./2-setup-kind.sh
+🔍 Checking if kind cluster 'poc-cluster' exists...
+No kind clusters found.
+🚀 Creating kind cluster 'poc-cluster'...
+...
+✅ Cluster 'poc-cluster' created successfully.
+```
+
+You can validate using:
+```bash
+$ kubectl cluster-info --context kind-poc-cluster
+Kubernetes control plane is running at https://127.0.0.1:34469
+CoreDNS is running at https://127.0.0.1:34469/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+$ kubectl get nodes
+NAME                        STATUS   ROLES           AGE   VERSION
+poc-cluster-control-plane   Ready    control-plane   23s   v1.32.2
+```
 
 ## 📂 Folder Overview
 
