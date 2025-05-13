@@ -2,23 +2,28 @@
 
 set -euo pipefail
 
-# The vcert command and its parameters are shown in "DevOps Tools" tabs when opening the Application you created
+# Resolve script directory (absolute path)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ARTEFACTS_DIR="$SCRIPT_DIR/artefacts"
+
+# Ensure artefacts folder exists
+mkdir -p "$ARTEFACTS_DIR"
 
 # Config
 API_KEY="${VCERT_APIKEY:-}"
 URL="https://api.venafi.eu/"
-ZONE="tls-demo-venafi-1\Default"
+ZONE="tls-demo-venafi-1\\Default"
 CN="tls-demo-venafi-vcert.vchatela.local"
-CERT_FILE="artefacts/vcert-cert.pem"
-KEY_FILE="artefacts/vcert-key.pem"
-CHAIN_FILE="artefacts/vcert-chain.pem"
+CERT_FILE="$ARTEFACTS_DIR/vcert-cert.pem"
+KEY_FILE="$ARTEFACTS_DIR/vcert-key.pem"
+CHAIN_FILE="$ARTEFACTS_DIR/vcert-chain.pem"
 
 if [[ -z "$API_KEY" ]]; then
   echo "Error: VCERT_APIKEY is not set"
   exit 1
 fi
 
-# Request cert (API_KEY is optionnal as set in variable)
+# Request cert
 vcert enroll \
     --platform "VCP" \
     --url "$URL" \
