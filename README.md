@@ -60,6 +60,6 @@ poc-cluster-control-plane   Ready    control-plane   23s   v1.32.2
 | Folder               | Description                                    |
 |----------------------|------------------------------------------------|
 | `venafi-cloud-api`   | Automate TLS cert requests with Venafi Cloud  |
+| `cert-manager-k8s`   | Kubernetes-native TLS automation with cert-manager |
 | `ejbca-rest-python`  | Use EJBCA REST API for issuance                |
 | `acme-certbot`       | Script cert issuance with certbot             |
-| `cert-manager-k8s`   | Kubernetes-native TLS automation with cert-manager |
