@@ -1,65 +1,92 @@
 # 🔐 Venafi Cloud Integration Examples
 
-This folder contains examples of how to automate TLS certificate issuance using **Venafi Cloud**, aligned with modern best practices like short-lived certificates and Kubernetes integration.
+This folder provides real-world examples of automating TLS certificate issuance using **Venafi Cloud**.
 
-We use the built-in `Default` CA provided in the 30-day Venafi Cloud trial.
+All examples use the built-in `Default` Certificate Authority available in the 30-day Venafi Cloud trial.
 
 ---
 
-## 📚 What You'll Find
+## 📁 Contents
 
-| Use Case | Tooling      | Folder/Script         | Description                                          |
-|----------|--------------|-----------------------|------------------------------------------------------|
-| ✅ Using binary | `vcert` (CLI) | `request_cert.sh`       | Bash script to request a certificate from Venafi Cloud |
-| 🔄 Using library | PowerShell (`VenafiPS`) | `request_cert.ps1`      | Equivalent cert request in Windows environment       |
-| 🚀 Using managed tool | `cert-manager` | `cert-manager/`         | Use cert-manager + Venafi Cloud in Kubernetes        |
-
-In the two first use cases we will focus on getting the certificate, on the third we will then import those results as secrets so to be used by a NGINX Frontend for demo purpose.
+| Use Case     | Tooling           | Script/File        | Description                                            |
+| ------------ | ----------------- | ------------------ | ------------------------------------------------------ |
+| ✅ CLI usage  | `vcert` (Bash)    | `request_cert.sh`  | Bash script to request a certificate from Venafi Cloud |
+| ✅ PowerShell | `VenafiPS` module | `request_cert.ps1` | PowerShell equivalent for Windows environments         |
 
 ---
 
 ## 🧩 Prerequisites
-### Venafi Cloud
-1. Start a new [Venafi Cloud Trial (30 days)](https://www.cyberark.com/try-buy/certificate-manager-saas-trial/)
-2. Get your API Key on your [https://eval-xxxxxxxx.venafi.cloud/](https://eval-xxxxxxxx.venafi.cloud/) by clicking on your avatar → **Preferences** → **API Keys**
-3. Make this API Key in your env
+
+### 1. Venafi Cloud Setup
+
+1. [Start a 30-day Venafi Cloud trial](https://www.cyberark.com/try-buy/certificate-manager-saas-trial/)
+
+2. Log into your portal (e.g., `https://eval-xxxxxxxx.venafi.cloud/`)
+
+3. Generate an API key:
+
+   * Click your avatar → **Preferences** → **API Keys**
+
+4. Export the API key as an environment variable:
+
+   **Bash**
+
+   ```bash
+   export VCERT_APIKEY="YOUR_API_KEY_HERE"
+   echo 'export VCERT_APIKEY="YOUR_API_KEY_HERE"' >> ~/.bashrc
+   ```
+
+   **PowerShell**
+
+   ```powershell
+   $env:VCERT_APIKEY = "YOUR_API_KEY_HERE"
+   ```
+
+5. Create a new application in the Venafi Cloud UI:
+
+   * Go to **Applications** → **Add Application**
+   * Name: e.g., `tls-demo-venafi-1`
+   * Owner: yourself
+   * Template: `Default`
+
+### 2. (Optional) Setup vSatellite for Key Generation
+
+To allow Venafi to generate private keys securely, deploy a [vSatellite](https://docs.venafi.cloud/vsatellite/t-VSatellite-deployNew/):
+
 ```bash
-export VCERT_APIKEY="YOUR_API_KEY_HERE"
-# echo 'export VCERT_APIKEY="YOUR_API_KEY_HERE"' >> ~/.bashrc
+sudo ./vsatctl preflight --api-url https://api.eu.venafi.cloud/
+sudo ./vsatctl install --pairing-code XXXXXXX --api-url https://api.eu.venafi.cloud/
 ```
-```powershell
-$env:VCERT_APIKEY = "YOUR_API_KEY_HERE"
+
+Sample output:
+
 ```
-1. Create an application in the portal, go to **Applications** → **Add Application**:
-   * A name like `tls-demo-venafi-1`
-   * Yourself as the owner
-   * The `Default` template
-2. (Optionnal) If you want Venafi to be able to generate private keys, you need to setup a [vSatellite](https://docs.venafi.cloud/vsatellite/t-VSatellite-deployNew/) which will encrypt (using local KEK) VaaS sensitive data. 
-```bash
-$ sudo ./vsatctl preflight --api-url https://api.eu.venafi.cloud/
-$ sudo ./vsatctl install --pairing-code xxxxxxx --api-url https://api.eu.venafi.cloud/
 INFO Registering with cloud...
 INFO Venafi VSatellite registration successful
-INFO Using Venafi API URL https://api.eu.venafi.cloud/, location 10.x.x.x
-INFO VSatellite installation is currently in progress, for detailed logs please check /root/logs/install.log
+...
 INFO VSatellite installation has been completed successfully!
 ```
 
 ---
 
-## Use Case 1: `vcert` enrollment 
-This example shows how to leverage CyberArk/Venafi's developped binary `vcert` to operate certificates with low level requirements.
-### Prerequisites
-To ensure `vcert` is available, run:
+## 🚀 Use Case 1: Bash with `vcert`
+
+This example uses the `vcert` CLI to request a certificate from Venafi Cloud.
+
+### 🔧 Install `vcert`
+
+Ensure the `vcert` binary is available:
+
 ```bash
 ./install-vcert.sh
 ```
-### Request a Certificate
 
-Run:
+### 📝 Request a Certificate
+
+Run the script:
 
 ```bash
-> ./request_cert.sh
+$ ./request_cert.sh
 Enter key passphrase:***
 Verifying - Enter key passphrase:***
 vCert: 2025/05/13 17:06:13  Warning: command line parameter -k has overridden environment variable VCERT_APIKEY 
@@ -75,31 +102,42 @@ Certificate issued and saved:
 - Chain: artefacts/vcert-chain.pem
 ```
 
-## Usecase 2: `VenafiPS` enrollment 
-This example shows how to request a certificate using PowerShell with the official VenafiPS module. It's useful when you're on a Windows environment and prefer scripting in PowerShell rather than Bash.
-### Prerequisites
-VenafiPS must be installed in your powerhsell.
+---
+
+## 🚀 Use Case 2: PowerShell with `VenafiPS`
+
+This example shows how to request a certificate on Windows using the official `VenafiPS` module.
+
+### 🔧 Install VenafiPS
 
 ```powershell
 Install-Module VenafiPS -Scope CurrentUser -Force
 ```
 
-### Request a Certificate
+### 📝 Request a Certificate
+
 ```powershell
-PS D:\Git\tls-automation-examples\venafi-cloud-api> .\request_cert.ps1
+$ .\request_cert.ps1
 [INFO] Connecting to Venafi Cloud...
 [INFO] Requesting certificate for CN: tls-demo-venafi-ps.vchatela.local...
 
 ✅ Certificate issued and saved:
-- Cert:  D:\Git\tls-automation-examples\venafi-cloud-api\artefacts\venafips-cert.pem
-- Chain: D:\Git\tls-automation-examples\venafi-cloud-api\artefacts\venafips-chain.pem
+- Cert:  artefacts/venafips-cert.pem
+- Chain: artefacts/venafips-chain.pem
 ```
 
-## Usecase 3: `cert-manager` enrollment and certificate installation for NGINX
-https://cert-manager.io/v1.16-docs/configuration/venafi/
+---
+
+## 🖥️ Venafi Cloud UI
+
+View your issued certificates directly in the Venafi Cloud portal:
+
+![Demo Certificates on Venafi as a Service](demo-certs.png)
+
+---
 
 ## 🔗 References
 
-* [Venafi Cloud Docs](https://docs.venafi.cloud)
-* [vcert GitHub](https://github.com/Venafi/vcert)
-* [CyberArk Venafi Cloud Trial](https://www.cyberark.com/try-buy/certificate-manager-saas-trial/)
+* [📘 Venafi Cloud Documentation](https://docs.venafi.cloud)
+* [🔧 vcert GitHub](https://github.com/Venafi/vcert)
+* [🚀 Venafi Cloud Trial](https://www.cyberark.com/try-buy/certificate-manager-saas-trial/)

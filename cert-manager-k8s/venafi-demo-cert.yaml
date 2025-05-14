@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: venafi-demo-cert-manager
+  namespace: default
+spec:
+  secretName: venafi-demo-cert-manager-tls
+  issuerRef:
+    name: cloud-venafi-issuer
+    kind: Issuer
+  commonName: venafi-demo-cert-manager.vchatela.local
+  dnsNames:
+  - venafi-demo-cert-manager.vchatela.local
+  duration: 2160h # 90 days
+  renewBefore: 360h # 15 days

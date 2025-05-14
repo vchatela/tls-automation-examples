@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: cloud-venafi-issuer
+  namespace: default
+spec:
+  venafi:
+    zone: "tls-demo-venafi-1\\Default"
+    cloud:
+      url: https://api.venafi.eu/
+      apiTokenSecretRef:
+        name: cloud-secret
+        key: apikey

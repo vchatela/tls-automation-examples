@@ -1,0 +1,56 @@
+# nginx-tls-deployment.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-tls
+  labels:
+    app: nginx-tls
+spec:
+  containers:
+  - name: nginx
+    image: nginx:stable
+    ports:
+    - containerPort: 443
+    volumeMounts:
+    - name: tls
+      mountPath: /etc/nginx/tls
+      readOnly: true
+    - name: config
+      mountPath: /etc/nginx/conf.d/default.conf
+      subPath: default.conf
+  volumes:
+  - name: tls
+    secret:
+      secretName: venafi-demo-cert-manager-tls
+  - name: config
+    configMap:
+      name: nginx-tls-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-tls-config
+data:
+  default.conf: |
+    server {
+      listen 443 ssl;
+      server_name _;
+
+      ssl_certificate /etc/nginx/tls/tls.crt;
+      ssl_certificate_key /etc/nginx/tls/tls.key;
+
+      location / {
+        return 200 'Hello from Venafi TLS!';
+      }
+    }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-tls
+spec:
+  selector:
+    app: nginx-tls
+  ports:
+  - port: 443
+    targetPort: 443
