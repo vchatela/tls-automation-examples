@@ -15,45 +15,22 @@ We use the built-in `Default` CA provided in the 30-day Venafi Cloud trial.
 | 🚀 Using managed tool | `cert-manager` | `cert-manager/`         | Use cert-manager + Venafi Cloud in Kubernetes        |
 
 In the two first use cases we will focus on getting the certificate, on the third we will then import those results as secrets so to be used by a NGINX Frontend for demo purpose.
+
 ---
 
 ## 🧩 Prerequisites
-
-- [Venafi Cloud Trial (30 days)](https://www.cyberark.com/try-buy/certificate-manager-saas-trial/)
-- Bash shell (Linux/macOS/WSL)
-- Tools: `curl`, `unzip`, `sudo`
-- (Optional) Kubernetes cluster (for later steps)
-
-
----
-
-## Venafi Cloud Setup
-
-### 🔑 Get Your API Key
-
-1. Log in to [https://eval-xxxxxxxx.venafi.cloud/](https://eval-xxxxxxxx.venafi.cloud/)
-2. Click your avatar → **Preferences** → **API Keys**
-3. Generate and copy a key
-4. Export it in your shell:
-
+### Venafi Cloud
+1. Start a new [Venafi Cloud Trial (30 days)](https://www.cyberark.com/try-buy/certificate-manager-saas-trial/)
+2. Get your API Key on your [https://eval-xxxxxxxx.venafi.cloud/](https://eval-xxxxxxxx.venafi.cloud/) by clicking on your avatar → **Preferences** → **API Keys**
+3. Make this API Key in your env
 ```bash
 export VCERT_APIKEY="YOUR_API_KEY_HERE"
+# echo 'export VCERT_APIKEY="YOUR_API_KEY_HERE"' >> ~/.bashrc
 ````
-
-To persist it:
-
-```bash
-echo 'export VCERT_APIKEY="YOUR_API_KEY_HERE"' >> ~/.bashrc
-```
 ```powershell
 $env:VCERT_APIKEY = "YOUR_API_KEY_HERE"
 ```
-
-### 🏗️ Create an Application
-
-1. In the portal, go to **Applications**
-2. Click **Add Application**
-3. Choose:
+4. Create an application in the portal, go to **Applications** → **Add Application**:
    * A name like `tls-demo-venafi-1`
    * Yourself as the owner
    * The `Default` template
@@ -87,15 +64,6 @@ Certificate issued and saved:
 - Key: artefacts/vcert-key.pem
 - Chain: artefacts/vcert-chain.pem
 ```
-
-This script will:
-
-* Authenticate to Venafi Cloud
-* Use the `Default` CA zone
-* Request a cert for a configured CN (edit the script to change it)
-* Save the result in the `artefacts/` folder
-
-> 🔧 Edit the CN in `request_cert.sh` to match your desired FQDN.
 
 ## Usecase 2: `VenafiPS` enrollment 
 This example shows how to request a certificate using PowerShell with the official VenafiPS module. It's useful when you're on a Windows environment and prefer scripting in PowerShell rather than Bash.
