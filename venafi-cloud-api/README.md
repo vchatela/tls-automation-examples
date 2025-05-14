@@ -10,9 +10,9 @@ We use the built-in `Default` CA provided in the 30-day Venafi Cloud trial.
 
 | Use Case | Tooling      | Folder/Script         | Description                                          |
 |----------|--------------|-----------------------|------------------------------------------------------|
-| ✅ Basic Test | `vcert` (CLI) | `request_cert.sh`       | Bash script to request a certificate from Venafi Cloud |
-| 🔄 Coming Soon | PowerShell (`VenafiPS`) | `request_cert.ps1`      | Equivalent cert request in Windows environment       |
-| 🚀 Coming Soon | `cert-manager` | `cert-manager/`         | Use cert-manager + Venafi Cloud in Kubernetes        |
+| ✅ Using binary | `vcert` (CLI) | `request_cert.sh`       | Bash script to request a certificate from Venafi Cloud |
+| 🔄 Using library | PowerShell (`VenafiPS`) | `request_cert.ps1`      | Equivalent cert request in Windows environment       |
+| 🚀 Using managed tool | `cert-manager` | `cert-manager/`         | Use cert-manager + Venafi Cloud in Kubernetes        |
 
 In the two first use cases we will focus on getting the certificate, on the third we will then import those results as secrets so to be used by a NGINX Frontend for demo purpose.
 ---
@@ -45,6 +45,9 @@ To persist it:
 ```bash
 echo 'export VCERT_APIKEY="YOUR_API_KEY_HERE"' >> ~/.bashrc
 ```
+```powershell
+$env:VCERT_APIKEY = "YOUR_API_KEY_HERE"
+```
 
 ### 🏗️ Create an Application
 
@@ -58,19 +61,12 @@ echo 'export VCERT_APIKEY="YOUR_API_KEY_HERE"' >> ~/.bashrc
 ---
 
 ## Use Case 1: `vcert` enrollment 
-### Getting vcert
+This example shows how to leverage CyberArk/Venafi's developped binary `vcert` to operate certificates with low level requirements.
+### Prerequisites
 To ensure `vcert` is available, run:
-
 ```bash
 ./install-vcert.sh
 ```
-
-This will:
-* Check if `vcert` is already installed
-* If not, download and install version `5.9.0` from GitHub
-
----
-
 ### Request a Certificate
 
 Run:
@@ -102,9 +98,27 @@ This script will:
 > 🔧 Edit the CN in `request_cert.sh` to match your desired FQDN.
 
 ## Usecase 2: `VenafiPS` enrollment 
+This example shows how to request a certificate using PowerShell with the official VenafiPS module. It's useful when you're on a Windows environment and prefer scripting in PowerShell rather than Bash.
+### Prerequisites
+VenafiPS must be installed in your powerhsell.
 
+```powershell
+Install-Module VenafiPS -Scope CurrentUser -Force
+```
+
+### Request a Certificate
+```powershell
+PS D:\Git\tls-automation-examples\venafi-cloud-api> .\request_cert.ps1
+[INFO] Connecting to Venafi Cloud...
+[INFO] Requesting certificate for CN: tls-demo-venafi-ps.vchatela.local...
+
+✅ Certificate issued and saved:
+- Cert:  D:\Git\tls-automation-examples\venafi-cloud-api\artefacts\venafips-cert.pem
+- Chain: D:\Git\tls-automation-examples\venafi-cloud-api\artefacts\venafips-chain.pem
+```
 
 ## Usecase 3: `cert-manager` enrollment and certificate installation for NGINX
+https://cert-manager.io/v1.16-docs/configuration/venafi/
 
 ## 🔗 References
 
