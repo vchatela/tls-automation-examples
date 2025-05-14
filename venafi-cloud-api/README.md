@@ -26,14 +26,24 @@ In the two first use cases we will focus on getting the certificate, on the thir
 ```bash
 export VCERT_APIKEY="YOUR_API_KEY_HERE"
 # echo 'export VCERT_APIKEY="YOUR_API_KEY_HERE"' >> ~/.bashrc
-````
+```
 ```powershell
 $env:VCERT_APIKEY = "YOUR_API_KEY_HERE"
 ```
-4. Create an application in the portal, go to **Applications** → **Add Application**:
+1. Create an application in the portal, go to **Applications** → **Add Application**:
    * A name like `tls-demo-venafi-1`
    * Yourself as the owner
    * The `Default` template
+2. (Optionnal) If you want Venafi to be able to generate private keys, you need to setup a [vSatellite](https://docs.venafi.cloud/vsatellite/t-VSatellite-deployNew/) which will encrypt (using local KEK) VaaS sensitive data. 
+```bash
+$ sudo ./vsatctl preflight --api-url https://api.eu.venafi.cloud/
+$ sudo ./vsatctl install --pairing-code xxxxxxx --api-url https://api.eu.venafi.cloud/
+INFO Registering with cloud...
+INFO Venafi VSatellite registration successful
+INFO Using Venafi API URL https://api.eu.venafi.cloud/, location 10.x.x.x
+INFO VSatellite installation is currently in progress, for detailed logs please check /root/logs/install.log
+INFO VSatellite installation has been completed successfully!
+```
 
 ---
 
