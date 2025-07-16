@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-KIND_VERSION="v0.27.0"
+KIND_VERSION="v0.29.0"
 
 echo "🔍 Checking and installing Kubernetes tools..."
 
