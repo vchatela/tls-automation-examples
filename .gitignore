@@ -6,3 +6,5 @@ README.html
 ejbca-rest-python/valentin-admin.*
 .venv/
 .idea/*
+ejbca-rest-python/ManagementCA.pem
+.cache_ggshield
