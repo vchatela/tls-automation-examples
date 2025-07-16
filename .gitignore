@@ -1,2 +1,6 @@
 artefacts/
 README.html
+*.csr
+*.key
+*.crt
+ejbca-rest-python/valentin-admin.*
