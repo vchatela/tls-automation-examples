@@ -4,3 +4,5 @@ README.html
 *.key
 *.crt
 ejbca-rest-python/valentin-admin.*
+.venv/
+.idea/*
