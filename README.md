@@ -6,10 +6,16 @@ These examples accompany a LinkedIn series by [@Valentin](https://www.linkedin.c
 
 ## 📌 Use Cases Covered
 
-1. **Venafi Cloud** with `vcert` and `VenafiPS`
-2. **EJBCA / Keyfactor** with REST API (Python)
-3. **ACME** automation with `certbot`
-4. **cert-manager** in Kubernetes clusters
+✅ **Already available:**
+1. **[CLM] Venafi Cloud** with `vcert` and `VenafiPS`
+2. **[CLM] EJBCA / Keyfactor** with REST API (Python) 🎯 *Fresh addition*
+3. **[ACME] certbot** for lightweight cert issuance and deployment on NGINX
+4. **[Kubernetes] cert-manager** with full Ingress + renewal flow and deployment on NGINX
+
+🧪 **What's cooking next:**
+5. **[DevOps] HashiCorp Vault Agent Injector** – Secrets injection in K8s
+6. **[DevOps] Ansible** with VenafiCloud
+7. **[PQC] Post quantum ready** with EJBCA
 
 Each folder is a standalone working example with:
 - Installation/setup instructions
