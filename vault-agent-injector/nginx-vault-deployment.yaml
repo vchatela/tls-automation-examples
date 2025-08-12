@@ -1,0 +1,128 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-vault
+  labels:
+    app: nginx-vault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-vault
+  template:
+    metadata:
+      labels:
+        app: nginx-vault
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "pki-role"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/agent-inject-secret-tls.crt: "pki_int/issue/tls-server"
+        vault.hashicorp.com/agent-inject-secret-tls.key: "pki_int/issue/tls-server"
+        vault.hashicorp.com/agent-inject-template-tls.crt: |
+          {{- with secret "pki_int/issue/tls-server" "common_name=nginx-vault.local" "ttl=24h" -}}
+          {{ .Data.certificate }}
+          {{- end -}}
+        vault.hashicorp.com/agent-inject-template-tls.key: |
+          {{- with secret "pki_int/issue/tls-server" "common_name=nginx-vault.local" "ttl=24h" -}}
+          {{ .Data.private_key }}
+          {{- end -}}
+        vault.hashicorp.com/agent-cache-enable: "true"
+        vault.hashicorp.com/agent-cache-use-auto-auth-token: "true"
+    spec:
+      serviceAccountName: vault-pki
+      containers:
+      - name: nginx
+        image: nginx:stable
+        ports:
+        - containerPort: 443
+          name: https
+        - containerPort: 80
+          name: http
+        volumeMounts:
+        - name: config
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: default.conf
+        # Vault Agent will mount certificates at /vault/secrets/
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+      volumes:
+      - name: config
+        configMap:
+          name: nginx-vault-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-vault-config
+data:
+  default.conf: |
+    server {
+        listen 80;
+        server_name _;
+        
+        location / {
+            return 301 https://$server_name$request_uri;
+        }
+    }
+    
+    server {
+        listen 443 ssl;
+        server_name nginx-vault.local;
+
+        # Vault Agent will inject certificates here
+        ssl_certificate /vault/secrets/tls.crt;
+        ssl_certificate_key /vault/secrets/tls.key;
+        
+        # SSL configuration
+        ssl_protocols TLSv1.2 TLSv1.3;
+        ssl_ciphers ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-RSA-AES128-GCM-SHA256;
+        ssl_prefer_server_ciphers off;
+        
+        # Security headers
+        add_header Strict-Transport-Security "max-age=63072000" always;
+        add_header X-Frame-Options DENY;
+        add_header X-Content-Type-Options nosniff;
+        
+        location / {
+            return 200 'Hello from HashiCorp Vault TLS!\nCertificate issued by Vault PKI Engine\nTTL: 24 hours\n';
+            add_header Content-Type text/plain;
+        }
+        
+        location /health {
+            access_log off;
+            return 200 "healthy\n";
+            add_header Content-Type text/plain;
+        }
+        
+        location /cert-info {
+            return 200 'Certificate Information:\nIssuer: Vault PKI Engine\nSubject: nginx-vault.local\nTTL: 24 hours\nAuto-renewal: Enabled\n';
+            add_header Content-Type text/plain;
+        }
+    }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-vault
+  labels:
+    app: nginx-vault
+spec:
+  selector:
+    app: nginx-vault
+  ports:
+  - name: https
+    port: 443
+    targetPort: 443
+    protocol: TCP
+  - name: http
+    port: 80
+    targetPort: 80
+    protocol: TCP
+  type: ClusterIP

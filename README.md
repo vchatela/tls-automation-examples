@@ -12,7 +12,7 @@ These examples accompany a LinkedIn series by [@Valentin](https://www.linkedin.c
 | 2 | ✅ | CLM | EJBCA / Keyfactor | REST API (Python) |
 | 3 | ✅ | ACME | certbot | Lightweight cert issuance and deployment on NGINX |
 | 4 | ✅ | Kubernetes | cert-manager | Full Ingress + renewal flow and deployment on NGINX |
-| 5 | ❌ | DevOps | HashiCorp Vault Agent Injector | Secrets injection in K8s - 🧪 *What's cooking next* |
+| 5 | ✅ | DevOps | HashiCorp Vault Agent Injector | Secrets injection in K8s with PKI engine |
 | 6 | ❌ | DevOps | Ansible | with VenafiCloud - 🧪 *What's cooking next* |
 | 7 | ❌ | PQC | EJBCA | Post quantum ready - 🧪 *What's cooking next* |
 
@@ -68,3 +68,4 @@ poc-cluster-control-plane   Ready    control-plane   23s   v1.32.2
 | `cert-manager-k8s`   | Kubernetes-native TLS automation with cert-manager |
 | `ejbca-rest-python`  | Use EJBCA REST API for issuance                |
 | `acme-certbot`       | Script cert issuance with certbot             |
+| `vault-agent-injector` | HashiCorp Vault PKI with Agent Injector     |
