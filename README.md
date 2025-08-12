@@ -6,16 +6,15 @@ These examples accompany a LinkedIn series by [@Valentin](https://www.linkedin.c
 
 ## 📌 Use Cases Covered
 
-✅ **Already available:**
-1. **[CLM] Venafi Cloud** with `vcert` and `VenafiPS`
-2. **[CLM] EJBCA / Keyfactor** with REST API (Python) 🎯 *Fresh addition*
-3. **[ACME] certbot** for lightweight cert issuance and deployment on NGINX
-4. **[Kubernetes] cert-manager** with full Ingress + renewal flow and deployment on NGINX
-
-🧪 **What's cooking next:**
-5. **[DevOps] HashiCorp Vault Agent Injector** – Secrets injection in K8s
-6. **[DevOps] Ansible** with VenafiCloud
-7. **[PQC] Post quantum ready** with EJBCA
+| # | Availability | Technology | Product | Comments |
+|---|--------------|------------|---------|----------|
+| 1 | ✅ | CLM | Venafi Cloud | with `vcert` and `VenafiPS` |
+| 2 | ✅ | CLM | EJBCA / Keyfactor | REST API (Python) |
+| 3 | ✅ | ACME | certbot | Lightweight cert issuance and deployment on NGINX |
+| 4 | ✅ | Kubernetes | cert-manager | Full Ingress + renewal flow and deployment on NGINX |
+| 5 | ❌ | DevOps | HashiCorp Vault Agent Injector | Secrets injection in K8s - 🧪 *What's cooking next* |
+| 6 | ❌ | DevOps | Ansible | with VenafiCloud - 🧪 *What's cooking next* |
+| 7 | ❌ | PQC | EJBCA | Post quantum ready - 🧪 *What's cooking next* |
 
 Each folder is a standalone working example with:
 - Installation/setup instructions
