@@ -14,18 +14,21 @@ These examples accompany a LinkedIn series by [@Valentin](https://www.linkedin.c
 | 4 | ✅ | Kubernetes | cert-manager | Full Ingress + renewal flow and deployment on NGINX |
 | 5 | ✅ | DevOps | HashiCorp Vault Agent Injector | Secrets injection in K8s with PKI engine |
 | 6 | ✅ | DevOps | Ansible | with Venafi as a Service - Infrastructure-as-Code cert management |
-| 7 | ❌ | PQC | EJBCA | Post quantum ready - 🧪 *What's cooking next* |
+| 7 | ✅ | PQC | EJBCA | Post-Quantum Cryptography (PQC) certificate automation |
 
-Each folder is a standalone working example with:
-- Installation/setup instructions
+
+Each folder is a standalone, working example including:
+- Installation and setup instructions
 - Scripts or manifests
-- Test deployment to verify cert install
+- Test deployment to verify certificate installation
 
 ## 🛠 Requirements
+
 ### Prerequisites
-- Any Linux host (wsl, VM etc.) to run and host the kubernetes cluster and any non powershell script.
+- Linux host (WSL, VM, etc.) to run Kubernetes and scripts
 - Docker installed
-- (Optional) VSCode via `Remote - WSL extension`
+- (Optional) VS Code with `Remote - WSL` extension
+
 
 ### Initialize the POC
 #### Prepare Kind
@@ -62,11 +65,11 @@ poc-cluster-control-plane   Ready    control-plane   23s   v1.32.2
 
 ## 📂 Folder Overview
 
-| Folder               | Description                                    |
-|----------------------|------------------------------------------------|
-| `venafi-cloud-api`   | Automate TLS cert requests with Venafi Cloud  |
-| `cert-manager-k8s`   | Kubernetes-native TLS automation with cert-manager |
-| `ejbca-rest-python`  | Use EJBCA REST API for issuance                |
-| `acme-certbot`       | Script cert issuance with certbot             |
-| `vault-agent-injector` | HashiCorp Vault PKI with Agent Injector     |
-| `ansible-venafi-cloud` | Infrastructure-as-Code TLS automation with Ansible |
+| Folder                   | Description                                         |
+|--------------------------|-----------------------------------------------------|
+| `venafi-cloud-api`       | Automate TLS certificate requests with Venafi Cloud  |
+| `cert-manager-k8s`       | Kubernetes-native TLS automation with cert-manager   |
+| `ejbca-rest-python`      | EJBCA REST API for certificate issuance             |
+| `acme-certbot`           | Scripted certificate issuance with certbot          |
+| `vault-agent-injector`   | HashiCorp Vault PKI with Agent Injector             |
+| `ansible-venafi-cloud`   | Infrastructure-as-Code TLS automation with Ansible  |
