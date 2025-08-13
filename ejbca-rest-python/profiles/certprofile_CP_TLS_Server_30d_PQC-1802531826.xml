@@ -187,7 +187,7 @@
    <string>availablekeyalgorithms</string>
    <object class="java.util.ArrayList">
     <void method="add">
-     <string>RSA</string>
+     <string>ML-DSA-65</string>
     </void>
    </object>
   </void>
