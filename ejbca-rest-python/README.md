@@ -1,6 +1,12 @@
-# EJBCA Enrollment via REST API
 
-This example demonstrates how to use **EJBCA Community Edition** to automate TLS certificate issuance using its **REST API**, backed by the **ManagementCA**. The setup includes role-based access control and certificate generation using `valentin-admin`.
+# EJBCA REST API Certificate Automation: Standard & PQC
+
+This example demonstrates how to use **EJBCA Community Edition** to automate TLS certificate issuance via its **REST API** for both classic (RSA/ECC) and post-quantum (ML-DSA-65) certificates. You will:
+
+- Generate a standard RSA certificate via REST API
+- Generate a PQC (ML-DSA-65) certificate via REST API
+
+The setup includes role-based access control and certificate generation using `valentin-admin`.
 
 ---
 
@@ -103,10 +109,15 @@ This generates:
 
 * `server-01.key`
 * `server-01.csr`
+* `server-02-pqc.key`
+* `server-02-pqc.csr`
 
 ---
 
-## 📩 Step 5 – Enroll via REST API
+
+## 🧪 Step 5 – Test 1: Standard Certificate via REST API
+
+Request a classic RSA certificate:
 
 ```bash
 python3 pkcs10Enroll.py \
@@ -121,35 +132,66 @@ python3 pkcs10Enroll.py \
   -n ManagementCA
 ```
 
-You will receive a JSON response with a base64-encoded DER certificate:
-
-```json
-{"certificate":"MIIEmjCCAwKgAwIBAgIUCuMS7OdGGhqVD+eoPkmJp1zbbsEwDQYJKoZIhvcNAQELBQAwYTEjMCEGCgmSJomT8ixkAQEME2MtMHhpMWppZnczZDVsZ2k5em4xFTATBgNVBAMMDE1hbmFnZW1lbnRDQTEjMCEGA1UECgwaRUpCQ0EgQ29udGFpbmVyIFF1aWNrc3RxxxPj268akZvJRHtE+Yea3hpnMXPI+/T2DpVCsC0z+j/2XwFu3c8aCJT/I8ycnNfG9qy6fgGic7eF+lFRWlugGMzEZElG4Ny0kiKTgFaMIg0QHnKQ27aq3REHg7TkkzHkJ",
-"serial_number":"AE312ECE7461A1A950FE7A83E4989A75CDB6EC1",
-"response_format":"DER"}
-```
-
----
-
-## 💾 Step 6 – Decode and Save the Certificate
+You will receive a JSON response with a base64-encoded DER certificate. To decode and inspect:
 
 ```bash
 echo "<base64 cert>" | base64 -d > server-01.der
 openssl x509 -inform der -in server-01.der -out server-01.crt
+openssl x509 -in server-01.crt -noout -text
+```
+
+## 🧪 Step 6 – Test 2: PQC Certificate via REST API
+
+Request a PQC (ML-DSA-65) certificate:
+
+```bash
+python3 pkcs10Enroll.py \
+  -c server-02-pqc.csr \
+  -H localhost \
+  -u server-02-pqc \
+  -p CP_TLS_Server_30d_PQC \
+  -e EEP_TLS_Server \
+  -t ManagementCA.pem \
+  -k valentin-admin.key \
+  -C valentin-admin.pem \
+  -n ManagementCA
+```
+
+You will receive a JSON response with a base64-encoded DER certificate. To decode and inspect:
+
+```bash
+echo "<base64 cert>" | base64 -d > server-02-pqc.der
+$HOME/openssl-3.5.2-local/bin/openssl x509 -inform der -in server-02-pqc.der -out server-02-pqc.crt
+$HOME/openssl-3.5.2-local/bin/openssl x509 -in server-02-pqc.crt -noout -text
+```
+
+You should see output like:
+```
+        Subject Public Key Info:
+            Public Key Algorithm: ML-DSA-65
+                ML-DSA-65 Public-Key:
 ```
 
 ---
 
+
+
+---
+
+
 ## 📆 Output Summary
 
-| File                 | Description                     |
-| -------------------- | ------------------------------- |
-| `server-01.key`      | TLS private key                 |
-| `server-01.csr`      | Certificate signing request     |
-| `server-01.crt`      | Signed certificate (PEM format) |
-| `valentin-admin.key` | RA admin private key            |
-| `valentin-admin.pem` | RA admin certificate            |
-| `ManagementCA.pem`   | Root CA certificate             |
+| File                   | Description                         |
+| ---------------------- | ----------------------------------- |
+| `server-01.key`        | TLS private key (classic)           |
+| `server-01.csr`        | Certificate signing request (classic)|
+| `server-01.crt`        | Signed certificate (PEM, classic)   |
+| `server-02-pqc.key`    | PQC (ML-DSA-65) private key         |
+| `server-02-pqc.csr`    | PQC certificate signing request     |
+| `server-02-pqc.crt`    | PQC signed certificate (PEM format) |
+| `valentin-admin.key`   | RA admin private key                |
+| `valentin-admin.pem`   | RA admin certificate                |
+| `ManagementCA.pem`     | Root CA certificate                 |
 
 ---
 

@@ -1,10 +1,23 @@
+# Build artefacts
 artefacts/
-README.html
+openssl-3.5.2/
+openssl-3.5.2.tar.gz
+
+# Certificates and keys
 *.csr
 *.key
 *.crt
-ejbca-rest-python/valentin-admin.*
-.venv/
-.idea/*
+*.der
 ejbca-rest-python/ManagementCA.pem
+ejbca-rest-python/valentin-admin.*
+
+# Python environment and IDE files
+.venv/
+.idea/
 .cache_ggshield
+
+# Documentation
+README.html
+
+# Runtime
+*.response
