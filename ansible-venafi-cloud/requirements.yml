@@ -1,0 +1,20 @@
+---
+# Ansible Collections Requirements
+# Install with: ansible-galaxy collection install -r requirements.yml
+
+collections:
+  # Venafi Machine Identity Management
+  - name: venafi.machine_identity
+    version: ">=1.0.0"
+    
+  # Community Crypto for certificate operations
+  - name: community.crypto
+    version: ">=2.0.0"
+    
+  # General community collection for various modules
+  - name: community.general
+    version: ">=6.0.0"
+    
+  # POSIX utilities collection
+  - name: ansible.posix
+    version: ">=1.4.0"

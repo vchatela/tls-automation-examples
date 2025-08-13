@@ -13,7 +13,7 @@ These examples accompany a LinkedIn series by [@Valentin](https://www.linkedin.c
 | 3 | ✅ | ACME | certbot | Lightweight cert issuance and deployment on NGINX |
 | 4 | ✅ | Kubernetes | cert-manager | Full Ingress + renewal flow and deployment on NGINX |
 | 5 | ✅ | DevOps | HashiCorp Vault Agent Injector | Secrets injection in K8s with PKI engine |
-| 6 | ❌ | DevOps | Ansible | with VenafiCloud - 🧪 *What's cooking next* |
+| 6 | ✅ | DevOps | Ansible | with Venafi as a Service - Infrastructure-as-Code cert management |
 | 7 | ❌ | PQC | EJBCA | Post quantum ready - 🧪 *What's cooking next* |
 
 Each folder is a standalone working example with:
@@ -69,3 +69,4 @@ poc-cluster-control-plane   Ready    control-plane   23s   v1.32.2
 | `ejbca-rest-python`  | Use EJBCA REST API for issuance                |
 | `acme-certbot`       | Script cert issuance with certbot             |
 | `vault-agent-injector` | HashiCorp Vault PKI with Agent Injector     |
+| `ansible-venafi-cloud` | Infrastructure-as-Code TLS automation with Ansible |

@@ -1,0 +1,12 @@
+# Ansible Vault for API Keys
+# This file contains encrypted sensitive variables
+# Decrypt with: ansible-vault decrypt vault.yml
+# Edit with: ansible-vault edit vault.yml
+
+$ANSIBLE_VAULT;1.1;AES256
+# This is a placeholder - run the following command to create your actual vault:
+# ansible-vault create vault.yml
+#
+# Add your API key like this:
+# ---
+# vault_venafi_api_key: "your-actual-api-key-here"

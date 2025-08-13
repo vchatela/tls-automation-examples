@@ -1,0 +1,73 @@
+---
+- name: Simple Certificate Request (No server deployment)
+  hosts: localhost
+  gather_facts: yes
+  connection: local
+  vars_files:
+    - vault.yml
+  
+  tasks:
+    - name: Create local SSL directory for testing
+      file:
+        path: "{{ ansible_env.HOME }}/ansible-certs"
+        state: directory
+        mode: '0700'
+
+    - name: Generate private key
+      community.crypto.openssl_privatekey:
+        path: "{{ ansible_env.HOME }}/ansible-certs/server.key"
+        size: 2048
+        mode: '0600'
+
+    - name: Generate certificate signing request (CSR)
+      community.crypto.openssl_csr:
+        path: "{{ ansible_env.HOME }}/ansible-certs/server.csr"
+        privatekey_path: "{{ ansible_env.HOME }}/ansible-certs/server.key"
+        common_name: "{{ certificate.common_name }}"
+        organization_name: "{{ certificate.organization }}"
+        country_name: "{{ certificate.country }}"
+        state_or_province_name: "{{ certificate.state }}"
+        locality_name: "{{ certificate.locality }}"
+        subject_alt_name: "{{ certificate.san_dns | map('regex_replace', '^', 'DNS:') | list }}"
+
+    - name: Debug API key configuration
+      debug:
+        msg: |
+          API Key configured: {{ 'Yes' if venafi.api_key else 'No' }}
+          API Key length: {{ venafi.api_key | length if venafi.api_key else 0 }}
+          URL: {{ venafi.url }}
+          Zone: {{ venafi.zone }}
+
+  # ...removed vcert getcred connectivity test...
+
+    - name: Request certificate from Venafi Cloud using CSR
+      venafi.machine_identity.venafi_certificate:
+        url: "https://api.venafi.eu/"
+        token: "{{ venafi.api_key }}"
+        zone: "{{ venafi.zone }}"
+        common_name: "{{ certificate.common_name }}"
+        csr_path: "{{ ansible_env.HOME }}/ansible-certs/server.csr"
+        cert_path: "{{ ansible_env.HOME }}/ansible-certs/server.crt"
+        chain_path: "{{ ansible_env.HOME }}/ansible-certs/server-chain.crt"
+        before_expired_hours: 720  # 30 days * 24 hours
+      register: cert_result
+
+    - name: Display certificate info
+      debug:
+        msg: |
+          ✅ Certificate requested successfully using CSR!
+          📋 Certificate Details:
+          - Common Name: {{ certificate.common_name }}
+          - Private Key Path: {{ ansible_env.HOME }}/ansible-certs/server.key (YOU control this)
+          - CSR Path: {{ ansible_env.HOME }}/ansible-certs/server.csr
+          - Certificate Path: {{ ansible_env.HOME }}/ansible-certs/server.crt
+          - Chain Path: {{ ansible_env.HOME }}/ansible-certs/server-chain.crt
+          
+          🔍 Verify certificate:
+          openssl x509 -in {{ ansible_env.HOME }}/ansible-certs/server.crt -text -noout
+          
+          🔐 Verify private key matches certificate:
+          openssl x509 -noout -modulus -in {{ ansible_env.HOME }}/ansible-certs/server.crt | openssl md5
+          openssl rsa -noout -modulus -in {{ ansible_env.HOME }}/ansible-certs/server.key | openssl md5
+          
+          💾 Files saved to: {{ ansible_env.HOME }}/ansible-certs/

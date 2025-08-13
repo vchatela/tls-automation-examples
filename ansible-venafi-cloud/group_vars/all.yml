@@ -1,0 +1,22 @@
+---
+# Simple Venafi Cloud Certificate Configuration
+
+# Venafi as a Service (VaaS) Configuration
+venafi:
+  api_key: "{{ vault_venafi_api_key | default(lookup('env', 'VCERT_APIKEY')) }}"
+  url: "https://api.venafi.eu/" 
+  zone: "ansible-demo-app\\Default"  # Your Application\\Issuing Template from Venafi Cloud
+
+# Certificate Details
+certificate:
+  common_name: "tls-demo-venafi-ansible.vchatela.local"  # Change this to your domain
+  organization: "Home"
+  locality: "Toulouse"
+  state: "France"
+  country: "FR"  # Two-letter country code
+  san_dns:
+    - "tls-demo-venafi-ansible.vchatela.local"
+    - "www.tls-demo-venafi-ansible.vchatela.local"
+
+# Local artifacts directory
+local_artifacts_dir: "./artefacts"

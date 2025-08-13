@@ -1,0 +1,54 @@
+# Git ignore file for Ansible Venafi Cloud automation
+
+# Ansible Vault files containing sensitive data
+vault.yml
+secrets.yml
+*.vault
+
+# Vault password files
+.vault-pass
+.vault_password
+vault-pass.txt
+
+# Generated certificates and private keys
+artefacts/
+*.pem
+*.crt
+*.key
+*.p12
+*.pfx
+
+# Ansible logs
+ansible.log
+*.retry
+
+# Backup folder with old complex playbooks
+backup/
+
+# Temporary files
+*.tmp
+.ansible/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Backup files
+*.bak
+*.backup
+
+# Environment files
+.env
+.env.local
