@@ -2,6 +2,8 @@ version: 2
 updates:
   - package-ecosystem: "docker-compose"
     directory: "/ejbca-rest-python"
+    cooldown:
+      default-days: 2
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
